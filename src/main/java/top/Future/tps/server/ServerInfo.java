@@ -14,11 +14,13 @@ public class ServerInfo {
     
     // Get average TPS over the history
     public double getAverageTps() {
+        if (server == null) return 0.0;
         return Math.min(20.0, 1000.0 / getAverageMspt());
     }
     
     // Get average MSPT over the history
     public double getAverageMspt() {
+        if (server == null) return 0.0;
         return server.getAverageTickTime();
     }
     
@@ -46,8 +48,13 @@ public class ServerInfo {
     // Get CPU usage (simplified)
     public double getCpuUsage() {
         OperatingSystemMXBean osBean = ManagementFactory.getOperatingSystemMXBean();
-        // Note: This is a simplified approach, in reality you'd need more sophisticated CPU monitoring
-        return osBean.getSystemLoadAverage();
+        double loadAverage = osBean.getSystemLoadAverage();
+        // 处理系统负载不可用的情况
+        if (loadAverage < 0) {
+            return 0.0;
+        }
+        // 限制CPU使用率在合理范围内
+        return Math.min(100.0, loadAverage);
     }
     
     // Format memory usage as human-readable string

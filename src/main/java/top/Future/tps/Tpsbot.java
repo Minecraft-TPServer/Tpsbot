@@ -42,6 +42,8 @@ public class Tpsbot implements ModInitializer {
         // Register server lifecycle events
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             LOGGER.info("Server started, connecting to OneBot...");
+            // 设置服务器实例到ServerManager
+            serverManager.setServer(server);
             botClient.connect();
         });
         

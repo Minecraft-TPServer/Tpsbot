@@ -26,7 +26,7 @@ public class UnbanCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String subType,  String[] args) {
         if (args.length < 1) {
             return new CommandHandler.CommandResult(false, "使用格式: /unban <player>");
         }

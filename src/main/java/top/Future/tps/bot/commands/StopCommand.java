@@ -26,7 +26,7 @@ public class StopCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String subType,  String[] args) {
         // Send confirmation message first
         String message = "服务器将在1秒后停止...";
         Tpsbot.INSTANCE.getBotClient().sendMessage(groupId, message);

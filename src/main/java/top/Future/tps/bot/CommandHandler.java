@@ -63,7 +63,7 @@ public class CommandHandler {
         
         // Execute command
         try {
-            return command.execute(userId, groupId, args);
+            return command.execute(userId, groupId, subType, args);
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Error executing command {}: {}", commandName, e.getMessage());
             return new CommandResult(false, "执行命令时发生错误: " + e.getMessage());
@@ -80,7 +80,7 @@ public class CommandHandler {
         String[] getAliases();
         String getDescription();
         int getRequiredLevel();
-        CommandResult execute(long userId, long groupId, String[] args);
+        CommandResult execute(long userId, long groupId, String subType, String[] args);
     }
     
     // Command result class

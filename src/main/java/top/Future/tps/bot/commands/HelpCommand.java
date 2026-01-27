@@ -28,7 +28,7 @@ public class HelpCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String subType, String[] args) {
         StringBuilder sb = new StringBuilder();
         sb.append("=== Tpsbot 命令帮助 ===\n");
         sb.append("使用格式: /命令 [参数]\n\n");

@@ -2,8 +2,9 @@ package top.Future.tps.config;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
-import top.Future.tps.Tpsbot;
 
 import java.io.File;
 import java.io.FileReader;
@@ -15,6 +16,7 @@ import java.util.List;
 public class BotConfig {
     private static final File CONFIG_FILE = new File(FabricLoader.getInstance().getConfigDir().toFile(), "tpsbot.json");
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static final JsonParser JSON_PARSER = new JsonParser();
     
     private String oneBotUrl = "ws://localhost:6700";
     private long superAdmin = 0L;
@@ -26,17 +28,38 @@ public class BotConfig {
     }
     
     public void load() {
+        // 确保配置目录存在
+        File configDir = CONFIG_FILE.getParentFile();
+        if (configDir != null && !configDir.exists()) {
+            configDir.mkdirs();
+        }
+        
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
-                BotConfig loadedConfig = GSON.fromJson(reader, BotConfig.class);
-                if (loadedConfig != null) {
-                    this.oneBotUrl = loadedConfig.oneBotUrl;
-                    this.superAdmin = loadedConfig.superAdmin;
-                    this.adminGroups = loadedConfig.adminGroups;
-                    this.commandPrefix = loadedConfig.commandPrefix;
+                // 使用JsonObject手动解析，避免Gson递归创建BotConfig实例
+                JsonObject jsonObject = JSON_PARSER.parse(reader).getAsJsonObject();
+                
+                // 手动提取字段值
+                if (jsonObject.has("oneBotUrl")) {
+                    this.oneBotUrl = jsonObject.get("oneBotUrl").getAsString();
+                }
+                if (jsonObject.has("superAdmin")) {
+                    this.superAdmin = jsonObject.get("superAdmin").getAsLong();
+                }
+                if (jsonObject.has("adminGroups")) {
+                    // 手动解析adminGroups数组
+                    this.adminGroups = new ArrayList<>();
+                    for (var element : jsonObject.getAsJsonArray("adminGroups")) {
+                        this.adminGroups.add(element.getAsLong());
+                    }
+                }
+                if (jsonObject.has("commandPrefix")) {
+                    this.commandPrefix = jsonObject.get("commandPrefix").getAsString();
                 }
             } catch (IOException e) {
-                Tpsbot.LOGGER.error("Failed to load config: {}", e.getMessage());
+                System.err.println("Failed to load config: " + e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Failed to parse config: " + e.getMessage());
             }
         } else {
             save();
@@ -44,10 +67,16 @@ public class BotConfig {
     }
     
     public void save() {
+        // 确保配置目录存在
+        File configDir = CONFIG_FILE.getParentFile();
+        if (configDir != null && !configDir.exists()) {
+            configDir.mkdirs();
+        }
+        
         try (FileWriter writer = new FileWriter(CONFIG_FILE)) {
             GSON.toJson(this, writer);
         } catch (IOException e) {
-            Tpsbot.LOGGER.error("Failed to save config: {}", e.getMessage());
+            System.err.println("Failed to save config: " + e.getMessage());
         }
     }
     

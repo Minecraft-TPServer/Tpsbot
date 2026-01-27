@@ -1,9 +1,7 @@
 package top.Future.tps;
 
-import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.Future.tps.bot.EventSystem;
@@ -28,12 +26,18 @@ public class Tpsbot implements ModInitializer {
         
         LOGGER.info("Initializing Tpsbot...");
         
-        // Initialize components
+        // Initialize components - BotConfig first
         config = new BotConfig();
+        LOGGER.info("BotConfig initialized successfully!");
+        
         permissionManager = new PermissionManager();
         serverManager = new ServerManager();
         eventSystem = new EventSystem();
         botClient = new OneBotClient();
+        
+        // Register Minecraft commands
+        top.Future.tps.command.MinecraftCommand.register();
+        LOGGER.info("Minecraft commands registered successfully!");
         
         // Register server lifecycle events
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {

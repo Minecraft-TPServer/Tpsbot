@@ -37,11 +37,11 @@ dependencies {
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-    // 添加okhttp3依赖
-    implementation "com.squareup.okhttp3:okhttp:4.10.0"
+    // 添加okhttp3依赖并包含到jar中
+    include implementation("com.squareup.okhttp3:okhttp:4.10.0")
 
-    // 添加gson依赖
-    implementation "com.google.code.gson:gson:2.10.1"
+    // 添加gson依赖并包含到jar中
+    include implementation("com.google.code.gson:gson:2.10.1")
 }
 
 processResources {

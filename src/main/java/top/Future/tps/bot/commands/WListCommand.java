@@ -41,6 +41,6 @@ public class WListCommand implements CommandHandler.Command {
             sb.append(CommandHandler.formatList("白名单成员:", whitelist));
         }
         
-        return new CommandHandler.CommandResult(true, CommandHandler.formatSuccess(sb.toString()));
+        return new CommandHandler.CommandResult(true, sb.toString());
     }
 }

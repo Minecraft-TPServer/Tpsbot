@@ -43,6 +43,6 @@ public class ListCommand implements CommandHandler.Command {
             sb.append(CommandHandler.formatPlayerList(players));
         }
         
-        return new CommandHandler.CommandResult(true, CommandHandler.formatSuccess(sb.toString()));
+        return new CommandHandler.CommandResult(true, sb.toString());
     }
 }

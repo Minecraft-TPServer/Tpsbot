@@ -103,15 +103,6 @@ public class CommandHandler {
         }
     }
     
-    // Formatting utility methods
-    public static String formatSuccess(String message) {
-        return "✅ " + message;
-    }
-    
-    public static String formatError(String message) {
-        return "❌ " + message;
-    }
-    
     public static String formatList(String title, List<String> items) {
         StringBuilder sb = new StringBuilder();
         sb.append(title).append("\n");

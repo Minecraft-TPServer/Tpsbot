@@ -28,16 +28,16 @@ public class WDelCommand implements CommandHandler.Command {
     @Override
     public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
         if (args.length != 1) {
-            return new CommandHandler.CommandResult(false, CommandHandler.formatError("用法: /wdel <player>"));
+            return new CommandHandler.CommandResult(false, "用法: /wdel <player>");
         }
         
         String player = args[0];
         boolean success = Tpsbot.INSTANCE.getServerManager().removeWhitelist(player);
         
         if (success) {
-            return new CommandHandler.CommandResult(true, CommandHandler.formatSuccess(String.format("已将玩家 %s 从白名单中删除", player)));
+            return new CommandHandler.CommandResult(true, String.format("已将玩家 %s 从白名单中删除", player));
         } else {
-            return new CommandHandler.CommandResult(false, CommandHandler.formatError(String.format("从白名单中删除玩家 %s 失败", player)));
+            return new CommandHandler.CommandResult(false, String.format("从白名单中删除玩家 %s 失败", player));
         }
     }
 }

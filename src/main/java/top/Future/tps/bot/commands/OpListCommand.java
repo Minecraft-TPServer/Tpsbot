@@ -41,6 +41,6 @@ public class OpListCommand implements CommandHandler.Command {
             sb.append(CommandHandler.formatList("op成员:", oplist));
         }
 
-        return new CommandHandler.CommandResult(true, CommandHandler.formatSuccess(sb.toString()));
+        return new CommandHandler.CommandResult(true, sb.toString());
     }
 }

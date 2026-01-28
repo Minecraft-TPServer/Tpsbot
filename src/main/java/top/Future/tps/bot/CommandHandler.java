@@ -48,7 +48,7 @@ public class CommandHandler {
         }
     }
     
-    public CommandResult executeCommand(long userId, long groupId, String subType, String commandName, String[] args) {
+    public CommandResult executeCommand(long userId, long groupId, String userRole, String commandName, String[] args) {
         Command command = commands.get(commandName.toLowerCase());
         
         if (command == null) {
@@ -57,13 +57,13 @@ public class CommandHandler {
         
         // Check permission
         int requiredLevel = command.getRequiredLevel();
-        if (!permissionManager.hasPermission(userId, subType, requiredLevel)) {
+        if (!permissionManager.hasPermission(userId, groupId, userRole, requiredLevel)) {
             return new CommandResult(false, "权限不足，无法执行该命令");
         }
         
         // Execute command
         try {
-            return command.execute(userId, groupId, subType, args);
+            return command.execute(userId, groupId, userRole, args);
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Error executing command {}: {}", commandName, e.getMessage());
             return new CommandResult(false, "执行命令时发生错误: " + e.getMessage());
@@ -80,7 +80,7 @@ public class CommandHandler {
         String[] getAliases();
         String getDescription();
         int getRequiredLevel();
-        CommandResult execute(long userId, long groupId, String subType, String[] args);
+        CommandResult execute(long userId, long groupId, String userRole, String[] args);
     }
     
     // Command result class

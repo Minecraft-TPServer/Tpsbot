@@ -28,7 +28,7 @@ public class ListCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String subType, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
         List<String> players = Tpsbot.INSTANCE.getServerManager().getPlayerNames();
         int count = players.size();
         int max = Tpsbot.INSTANCE.getServerManager().getMaxPlayers();

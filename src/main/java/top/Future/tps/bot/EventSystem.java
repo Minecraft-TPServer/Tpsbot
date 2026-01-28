@@ -78,7 +78,7 @@ public class EventSystem {
     }
     
     private void handleGroupMessage(JsonObject event) {
-        if (!event.has("group_id") || !event.has("user_id") || !event.has("message") || !event.has("sub_type")) {
+        if (!event.has("group_id") || !event.has("user_id") || !event.has("message")) {
             Tpsbot.LOGGER.error("Failed to handle group message: missing required fields");
             Tpsbot.LOGGER.debug("Event: {}", event.toString());
             return;
@@ -126,14 +126,17 @@ public class EventSystem {
             Tpsbot.LOGGER.debug("Message element: {}", event.get("message").toString());
         }
         
-        // 处理 sub_type 字段
-        String subType = "";
+        // 处理用户身份信息，从 sender 字段获取
+        String userRole = "member"; // 默认普通成员
         try {
-            if (event.get("sub_type").isJsonPrimitive()) {
-                subType = event.get("sub_type").getAsString();
+            if (event.has("sender")) {
+                JsonObject sender = event.getAsJsonObject("sender");
+                if (sender.has("role")) {
+                    userRole = sender.get("role").getAsString();
+                }
             }
         } catch (Exception e) {
-            Tpsbot.LOGGER.error("Failed to parse sub_type: {}", e.getMessage());
+            Tpsbot.LOGGER.error("Failed to parse sender role: {}", e.getMessage());
         }
         
         BotConfig config = Tpsbot.INSTANCE.getConfig();
@@ -152,7 +155,7 @@ public class EventSystem {
                 String[] args = parts.subList(1, parts.size()).toArray(new String[0]);
                 
                 // Execute command
-                CommandResult result = commandHandler.executeCommand(userId, groupId, subType, commandName, args);
+                CommandResult result = commandHandler.executeCommand(userId, groupId, userRole, commandName, args);
                 
                 // Send result back to group
                 if (result != null && result.getMessage() != null) {

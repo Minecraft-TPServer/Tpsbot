@@ -26,7 +26,7 @@ public class InfoCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String subType, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
         String info = Tpsbot.INSTANCE.getServerManager().getServerInfo().getDetailedInfo();
         return new CommandHandler.CommandResult(true, info);
     }

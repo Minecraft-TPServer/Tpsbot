@@ -28,7 +28,7 @@ public class WListCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String subType, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
         List<String> whitelist = Tpsbot.INSTANCE.getServerManager().getWhitelist();
         
         StringBuilder sb = new StringBuilder();

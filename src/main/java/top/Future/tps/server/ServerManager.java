@@ -180,7 +180,7 @@ public class ServerManager {
             if (player != null) {
                 playerManager.getWhitelist().add(new WhitelistEntry(player.getGameProfile()));
             }
-            return false;
+            return true;
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Failed to add player {} to whitelist: {}", name, e.getMessage());
             return false;
@@ -195,7 +195,7 @@ public class ServerManager {
             if (player != null) {
                 playerManager.getWhitelist().remove(new WhitelistEntry(player.getGameProfile()));
             }
-            return false;
+            return true;
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Failed to remove player {} to whitelist: {}", name, e.getMessage());
             return false;

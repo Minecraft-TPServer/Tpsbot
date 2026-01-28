@@ -18,7 +18,7 @@ public class BotConfig {
     private static final Gson GSON = new GsonBuilder().setPrettyPrinting().create();
     private static final JsonParser JSON_PARSER = new JsonParser();
     
-    private String oneBotUrl = "ws://localhost:6700";
+    private String oneBotUrl = "ws://localhost:3001";
     private long superAdmin = 0L;
     private List<Long> adminGroups = new ArrayList<>();
     private String commandPrefix = "/";

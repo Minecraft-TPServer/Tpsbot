@@ -26,9 +26,9 @@ public class AdminTestCommand implements CommandHandler.Command {
     }
     
     @Override
-    public CommandHandler.CommandResult execute(long userId, long groupId, String subType, String[] args) {
+    public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
         PermissionManager permissionManager = Tpsbot.INSTANCE.getPermissionManager();
-        int userLevel = permissionManager.getPermissionLevel(userId, subType);
+        int userLevel = permissionManager.getPermissionLevel(userId, groupId, userRole);
         String userLevelName = permissionManager.getPermissionName(userLevel);
         
         StringBuilder sb = new StringBuilder();

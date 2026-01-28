@@ -30,17 +30,16 @@ public class AdminTestCommand implements CommandHandler.Command {
         PermissionManager permissionManager = Tpsbot.INSTANCE.getPermissionManager();
         int userLevel = permissionManager.getPermissionLevel(userId, groupId, userRole);
         String userLevelName = permissionManager.getPermissionName(userLevel);
+
+        String sb = "=== 权限等级信息 ===\n" +
+                "当前用户权限等级: " + userLevel + " - " + userLevelName + "\n\n" +
+                "权限等级说明:\n" +
+                "1. 普通成员 - 可以使用基础命令\n" +
+                "2. 管理员 - 可以使用管理命令\n" +
+                "3. 群主 - 可以使用高级管理命令\n" +
+                "4. 超级管理员 - 可以使用所有命令\n\n" +
+                "使用 /help 查看各命令所需权限等级\n";
         
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== 权限等级信息 ===\n");
-        sb.append("当前用户权限等级: " + userLevel + " - " + userLevelName + "\n\n");
-        sb.append("权限等级说明:\n");
-        sb.append("1. 普通成员 - 可以使用基础命令\n");
-        sb.append("2. 管理员 - 可以使用管理命令\n");
-        sb.append("3. 群主 - 可以使用高级管理命令\n");
-        sb.append("4. 超级管理员 - 可以使用所有命令\n\n");
-        sb.append("使用 /help 查看各命令所需权限等级\n");
-        
-        return new CommandHandler.CommandResult(true, sb.toString());
+        return new CommandHandler.CommandResult(true, sb);
     }
 }

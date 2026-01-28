@@ -1,11 +1,12 @@
 package top.Future.tps.bot;
 
-import com.google.gson.JsonObject;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import top.Future.tps.Tpsbot;
 import top.Future.tps.bot.CommandHandler.CommandResult;
 import top.Future.tps.config.BotConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -151,15 +152,15 @@ public class EventSystem {
             List<String> parts = parseCommandLine(commandLine);
             
             if (!parts.isEmpty()) {
-                String commandName = parts.get(0).toLowerCase();
+                String commandName = parts.getFirst().toLowerCase();
                 String[] args = parts.subList(1, parts.size()).toArray(new String[0]);
                 
                 // Execute command
                 CommandResult result = commandHandler.executeCommand(userId, groupId, userRole, commandName, args);
                 
                 // Send result back to group
-                if (result != null && result.getMessage() != null) {
-                    Tpsbot.INSTANCE.getBotClient().sendMessage(groupId, result.getMessage());
+                if (result != null && result.message() != null) {
+                    Tpsbot.INSTANCE.getBotClient().sendMessage(groupId, result.message());
                 }
             }
         }
@@ -199,7 +200,7 @@ public class EventSystem {
             } else if (c == '"') {
                 inQuotes = !inQuotes;
             } else if (c == ' ' && !inQuotes) {
-                if (currentArg.length() > 0) {
+                if (!currentArg.isEmpty()) {
                     result.add(currentArg.toString());
                     currentArg.setLength(0);
                 }
@@ -208,7 +209,7 @@ public class EventSystem {
             }
         }
         
-        if (currentArg.length() > 0) {
+        if (!currentArg.isEmpty()) {
             result.add(currentArg.toString());
         }
         

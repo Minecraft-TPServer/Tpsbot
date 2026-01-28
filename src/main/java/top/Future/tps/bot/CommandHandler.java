@@ -83,24 +83,9 @@ public class CommandHandler {
         int getRequiredLevel();
         CommandResult execute(long userId, long groupId, String userRole, String[] args);
     }
-    
+
     // Command result class
-    public static class CommandResult {
-        private final boolean success;
-        private final String message;
-        
-        public CommandResult(boolean success, String message) {
-            this.success = success;
-            this.message = message;
-        }
-        
-        public boolean isSuccess() {
-            return success;
-        }
-        
-        public String getMessage() {
-            return message;
-        }
+    public record CommandResult(boolean success, String message) {
     }
     
     public static String formatList(String title, List<String> items) {

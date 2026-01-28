@@ -7,6 +7,7 @@ import okhttp3.Request;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+import org.jetbrains.annotations.NotNull;
 import top.Future.tps.Tpsbot;
 import top.Future.tps.config.BotConfig;
 
@@ -41,36 +42,36 @@ public class OneBotClient {
         Request request = new Request.Builder().url(wsUrl).build();
         this.webSocket = client.newWebSocket(request, new WebSocketListener() {
             @Override
-            public void onOpen(WebSocket webSocket, okhttp3.Response response) {
+            public void onOpen(@NotNull WebSocket webSocket, okhttp3.@NotNull Response response) {
                 Tpsbot.LOGGER.info("Connected to OneBot server!");
                 isConnected = true;
                 reconnectAttempts = 0;
             }
             
             @Override
-            public void onMessage(WebSocket webSocket, String text) {
+            public void onMessage(@NotNull WebSocket webSocket, @NotNull String text) {
                 handleMessage(text);
             }
             
             @Override
-            public void onMessage(WebSocket webSocket, ByteString bytes) {
+            public void onMessage(@NotNull WebSocket webSocket, @NotNull ByteString bytes) {
                 // Handle binary messages if needed
             }
             
             @Override
-            public void onClosing(WebSocket webSocket, int code, String reason) {
+            public void onClosing(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                 Tpsbot.LOGGER.info("Closing OneBot connection: {}", reason);
                 isConnected = false;
             }
             
             @Override
-            public void onClosed(WebSocket webSocket, int code, String reason) {
+            public void onClosed(@NotNull WebSocket webSocket, int code, @NotNull String reason) {
                 Tpsbot.LOGGER.info("OneBot connection closed: {}", reason);
                 isConnected = false;
             }
             
             @Override
-            public void onFailure(WebSocket webSocket, Throwable t, okhttp3.Response response) {
+            public void onFailure(@NotNull WebSocket webSocket, @NotNull Throwable t, okhttp3.Response response) {
                 Tpsbot.LOGGER.error("OneBot connection failed: {}", t.getMessage());
                 isConnected = false;
                 attemptReconnect();
@@ -81,7 +82,7 @@ public class OneBotClient {
     private void attemptReconnect() {
         if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
             reconnectAttempts++;
-            long delay = RECONNECT_DELAY * reconnectAttempts;
+            long delay = (long) RECONNECT_DELAY * reconnectAttempts;
             Tpsbot.LOGGER.info("Attempting to reconnect in {} seconds... (Attempt {}/{})",delay,reconnectAttempts,MAX_RECONNECT_ATTEMPTS);
             reconnectExecutor.schedule(this::connect, delay, TimeUnit.SECONDS);
         } else {

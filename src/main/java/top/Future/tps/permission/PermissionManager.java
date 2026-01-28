@@ -48,19 +48,13 @@ public class PermissionManager {
         }
         
         // Calculate permission level
-        int level;
-        switch (userRole) {
-            case "owner":
-                level = LEVEL_OWNER;
-                break;
-            case "admin":
-                level = LEVEL_ADMIN;
-                break;
-            default: // normal member
-                level = LEVEL_MEMBER;
-                break;
-        }
-        
+        int level = switch (userRole) {
+            case "owner" -> LEVEL_OWNER;
+            case "admin" -> LEVEL_ADMIN;
+            default -> // normal member
+                    LEVEL_MEMBER;
+        };
+
         // Update cache
         permissionCache.put(cacheKey, level);
         cacheTimestamps.put(cacheKey, System.currentTimeMillis());
@@ -87,17 +81,12 @@ public class PermissionManager {
      * @return Human-readable permission name
      */
     public String getPermissionName(int level) {
-        switch (level) {
-            case LEVEL_SUPER_ADMIN:
-                return "超级管理员";
-            case LEVEL_OWNER:
-                return "群主";
-            case LEVEL_ADMIN:
-                return "管理员";
-            case LEVEL_MEMBER:
-                return "普通成员";
-            default:
-                return "未知权限";
-        }
+        return switch (level) {
+            case LEVEL_SUPER_ADMIN -> "超级管理员";
+            case LEVEL_OWNER -> "群主";
+            case LEVEL_ADMIN -> "管理员";
+            case LEVEL_MEMBER -> "普通成员";
+            default -> "未知权限";
+        };
     }
 }

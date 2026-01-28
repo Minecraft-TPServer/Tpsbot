@@ -37,7 +37,7 @@ public class BotConfig {
         if (CONFIG_FILE.exists()) {
             try (FileReader reader = new FileReader(CONFIG_FILE)) {
                 // 使用JsonObject手动解析，避免Gson递归创建BotConfig实例
-                JsonObject jsonObject = JSON_PARSER.parse(reader).getAsJsonObject();
+                JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
                 
                 // 手动提取字段值
                 if (jsonObject.has("oneBotUrl")) {

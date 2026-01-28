@@ -3,6 +3,7 @@ package top.Future.tps.bot.commands;
 import top.Future.tps.Tpsbot;
 import top.Future.tps.bot.CommandHandler;
 import top.Future.tps.permission.PermissionManager;
+
 import java.util.Arrays;
 
 public class KickCommand implements CommandHandler.Command {

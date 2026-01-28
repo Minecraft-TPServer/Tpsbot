@@ -93,11 +93,9 @@ public class ServerInfo {
             
             if (playerCount > 0) {
                 sb.append("玩家列表: ");
-                server.getPlayerManager().getPlayerList().forEach(player -> {
-                    sb.append(player.getGameProfile().getName()).append(", ");
-                });
+                server.getPlayerManager().getPlayerList().forEach(player -> sb.append(player.getGameProfile().getName()).append(", "));
                 // Remove trailing comma
-                if (sb.length() > 0) {
+                if (!sb.isEmpty()) {
                     sb.setLength(sb.length() - 2);
                 }
                 sb.append("\n");

@@ -82,10 +82,11 @@ public class OneBotClient {
         if (reconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
             reconnectAttempts++;
             long delay = RECONNECT_DELAY * reconnectAttempts;
-            Tpsbot.LOGGER.info("Attempting to reconnect in {} seconds... (Attempt {}/{})");
+            Tpsbot.LOGGER.info("Attempting to reconnect in {} seconds... (Attempt {}/{})",delay,reconnectAttempts,MAX_RECONNECT_ATTEMPTS);
             reconnectExecutor.schedule(this::connect, delay, TimeUnit.SECONDS);
         } else {
             Tpsbot.LOGGER.error("Max reconnection attempts reached. Please check your OneBot server.");
+            reconnectAttempts=0;
         }
     }
     

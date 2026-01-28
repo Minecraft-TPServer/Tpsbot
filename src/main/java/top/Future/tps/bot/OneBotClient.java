@@ -92,10 +92,9 @@ public class OneBotClient {
     
     public void disconnect() {
         if (webSocket != null) {
-            webSocket.close(1000, "Mod shutdown");
+            webSocket.close(1000, "voluntary exit");
             webSocket = null;
         }
-        reconnectExecutor.shutdownNow();
         isConnected = false;
     }
     
@@ -129,5 +128,10 @@ public class OneBotClient {
     
     public boolean isConnected() {
         return isConnected;
+    }
+
+    public void close() {
+        disconnect();
+        reconnectExecutor.shutdownNow();
     }
 }

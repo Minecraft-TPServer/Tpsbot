@@ -34,6 +34,7 @@ public class CommandHandler {
         registerCommand(new UnbanIpCommand());
         registerCommand(new OpCommand());
         registerCommand(new DeopCommand());
+        registerCommand(new OpListCommand());
         registerCommand(new StopCommand());
         registerCommand(new RebootCommand());
         

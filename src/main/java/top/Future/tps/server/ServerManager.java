@@ -1,10 +1,12 @@
 package top.Future.tps.server;
 
+import com.mojang.authlib.GameProfile;
 import net.minecraft.server.*;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 import top.Future.tps.Tpsbot;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -159,6 +161,17 @@ public class ServerManager {
         }
         return false;
     }
+
+    public List<String> getOpList() {
+        if (server == null) return Collections.emptyList();
+        try{
+            PlayerManager playerManager = server.getPlayerManager();
+            return List.of(playerManager.getOpNames());
+        } catch (Exception e) {
+            Tpsbot.LOGGER.error("Failed to get oplist {}", e.getMessage());
+            return new ArrayList<>();
+        }
+    }
     
     // Whitelist management
     public List<String> getWhitelist() {
@@ -177,31 +190,30 @@ public class ServerManager {
         try {
             PlayerManager playerManager = server.getPlayerManager();
             ServerPlayerEntity player = playerManager.getPlayer(name);
-            if (player != null) {
-                playerManager.getWhitelist().add(new WhitelistEntry(player.getGameProfile()));
-            }
+            Whitelist whitelist = playerManager.getWhitelist();
+            Optional<GameProfile> profileOpt = Objects.requireNonNull(server.getUserCache()).findByName(name);
+            profileOpt.ifPresent(profile -> whitelist.add(new WhitelistEntry(profile)));
             return true;
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Failed to add player {} to whitelist: {}", name, e.getMessage());
             return false;
         }
     }
-    
+
     public boolean removeWhitelist(String name) {
         if (server == null) return false;
         try {
             PlayerManager playerManager = server.getPlayerManager();
             ServerPlayerEntity player = playerManager.getPlayer(name);
-            if (player != null) {
-                playerManager.getWhitelist().remove(new WhitelistEntry(player.getGameProfile()));
-            }
+            Whitelist whitelist = playerManager.getWhitelist();
+            Optional<GameProfile> profileOpt = Objects.requireNonNull(server.getUserCache()).findByName(name);
+            profileOpt.ifPresent(profile -> whitelist.remove(new WhitelistEntry(profile)));
             return true;
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Failed to remove player {} to whitelist: {}", name, e.getMessage());
             return false;
         }
     }
-    
     // Server control
     public void stopServer() {
         if (server == null) return;

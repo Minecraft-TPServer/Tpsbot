@@ -33,6 +33,9 @@ public class MinecraftCommand {
                     .executes(MinecraftCommand::disableSync)
                 )
             )
+            .then(CommandManager.literal("reload")
+                .executes(MinecraftCommand::reload)
+            )
         );
     }
     
@@ -111,6 +114,29 @@ public class MinecraftCommand {
         } catch (Exception e) {
             source.sendFeedback(() -> Text.literal("§c禁用群服互通失败: " + e.getMessage()), true);
             Tpsbot.LOGGER.error("Failed to disable sync: {}", e.getMessage());
+        }
+        
+        return 1;
+    }
+    
+    private static int reload(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        try {
+            // 重新加载配置文件
+            Tpsbot.INSTANCE.getConfig().load();
+            
+            // 重启机器人连接
+            if (Tpsbot.INSTANCE.getBotClient() != null) {
+                Tpsbot.INSTANCE.getBotClient().disconnect();
+                Tpsbot.INSTANCE.getBotClient().connect();
+            }
+            
+            source.sendFeedback(() -> Text.literal("§aTpsbot 已重新加载配置并重启连接"), true);
+            Tpsbot.LOGGER.info("Tpsbot reloaded and reconnecting...");
+        } catch (Exception e) {
+            source.sendFeedback(() -> Text.literal("§c重新加载失败: " + e.getMessage()), true);
+            Tpsbot.LOGGER.error("Failed to reload: {}", e.getMessage());
         }
         
         return 1;

@@ -39,13 +39,13 @@ public class InfoCommand implements CommandHandler.Command {
         
         // 构建完整的信息
         StringBuilder infoBuilder = new StringBuilder();
-        infoBuilder.append("§6Tpsbot 信息:");
-        infoBuilder.append("\n§7版本: §r" + modVersion);
-        infoBuilder.append("\n§7连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
-        infoBuilder.append("\n§7群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
-        infoBuilder.append("\n§7OneBot URL: §r" + Tpsbot.INSTANCE.getConfig().getOneBotUrl());
-        infoBuilder.append("\n§7超级管理员: §r" + Tpsbot.INSTANCE.getConfig().getSuperAdmin());
-        infoBuilder.append("\n§7命令前缀: §r" + Tpsbot.INSTANCE.getConfig().getCommandPrefix());
+        infoBuilder.append("Tpsbot 信息:");
+        infoBuilder.append("\n版本: §r" + modVersion);
+        infoBuilder.append("\n连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
+        infoBuilder.append("\n群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
+        infoBuilder.append("\nOneBot URL: " + Tpsbot.INSTANCE.getConfig().getOneBotUrl());
+        infoBuilder.append("\n超级管理员: " + Tpsbot.INSTANCE.getConfig().getSuperAdmin());
+        infoBuilder.append("\n命令前缀: " + Tpsbot.INSTANCE.getConfig().getCommandPrefix());
         infoBuilder.append("\n");
         infoBuilder.append(serverInfo);
         

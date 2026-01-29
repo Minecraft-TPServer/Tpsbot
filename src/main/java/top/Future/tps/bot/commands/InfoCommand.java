@@ -27,7 +27,28 @@ public class InfoCommand implements CommandHandler.Command {
     
     @Override
     public CommandHandler.CommandResult execute(long userId, long groupId, String userRole, String[] args) {
-        String info = Tpsbot.INSTANCE.getServerManager().getServerInfo().getDetailedInfo();
-        return new CommandHandler.CommandResult(true, info);
+        // 获取服务器详细信息
+        String serverInfo = Tpsbot.INSTANCE.getServerManager().getServerInfo().getDetailedInfo();
+        
+        // 获取机器人状态信息
+        boolean isConnected = Tpsbot.INSTANCE.getBotClient() != null && Tpsbot.INSTANCE.getBotClient().isConnected();
+        boolean isSyncEnabled = Tpsbot.INSTANCE.getConfig().isServerGroupSyncEnabled();
+        
+        // 获取版本号
+        String modVersion = Tpsbot.INSTANCE.getModVersion();
+        
+        // 构建完整的信息
+        StringBuilder infoBuilder = new StringBuilder();
+        infoBuilder.append("§6Tpsbot 信息:");
+        infoBuilder.append("\n§7版本: §r" + modVersion);
+        infoBuilder.append("\n§7连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
+        infoBuilder.append("\n§7群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
+        infoBuilder.append("\n§7OneBot URL: §r" + Tpsbot.INSTANCE.getConfig().getOneBotUrl());
+        infoBuilder.append("\n§7超级管理员: §r" + Tpsbot.INSTANCE.getConfig().getSuperAdmin());
+        infoBuilder.append("\n§7命令前缀: §r" + Tpsbot.INSTANCE.getConfig().getCommandPrefix());
+        infoBuilder.append("\n");
+        infoBuilder.append(serverInfo);
+        
+        return new CommandHandler.CommandResult(true, infoBuilder.toString());
     }
 }

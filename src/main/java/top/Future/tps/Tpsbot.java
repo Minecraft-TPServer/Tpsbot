@@ -28,12 +28,12 @@ public class Tpsbot implements ModInitializer {
     private EventSystem eventSystem;
     private PermissionManager permissionManager;
     private ServerManager serverManager;
-    
+    String modVersion = "UNKNOWN";
     @Override
     public void onInitialize() {
         INSTANCE = this;
 
-        String modVersion = "UNKNOWN";
+
         try {
             Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(MOD_ID);
             if (container.isPresent()) {
@@ -120,5 +120,9 @@ public class Tpsbot implements ModInitializer {
     
     public ServerManager getServerManager() {
         return serverManager;
+    }
+
+    public String getModVersion() {
+        return modVersion;
     }
 }

@@ -2,8 +2,12 @@ package top.Future.tps;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.Future.tps.bot.EventSystem;
@@ -68,7 +72,34 @@ public class Tpsbot implements ModInitializer {
             }
         });
 
+        // Server-group sync functionality will be implemented here
+        LOGGER.info("Server-group sync functionality initialized!");
+
+        // Register chat message event listener
+        ServerMessageEvents.CHAT_MESSAGE.register((message, sender, params) -> {
+            if (!(sender instanceof ServerPlayerEntity serverPlayer)) return;
+            
+            // Check if server-group sync is enabled
+            if (!config.isServerGroupSyncEnabled()) return;
+            
+            try {
+                String playerName = serverPlayer.getName().getString();
+                String messageContent = message.getContent().getString();
+                String formattedMessage = "[游戏] " + playerName + ": " + messageContent;
+                
+                // Send message to all admin groups
+                for (long groupId : config.getAdminGroups()) {
+                    botClient.sendMessage(groupId, formattedMessage);
+                }
+                
+                LOGGER.info("Game chat message forwarded: {}: {}", playerName, messageContent);
+            } catch (Exception e) {
+                LOGGER.error("Failed to handle game chat message: {}", e.getMessage());
+            }
+        });
+
         LOGGER.info("Tpsbot initialized successfully!");
+        LOGGER.info("Game chat message forwarding to QQ enabled!");
     }
     
     // Getters

@@ -25,6 +25,14 @@ public class MinecraftCommand {
             .then(CommandManager.literal("status")
                 .executes(MinecraftCommand::status)
             )
+            .then(CommandManager.literal("sync")
+                .then(CommandManager.literal("enable")
+                    .executes(MinecraftCommand::enableSync)
+                )
+                .then(CommandManager.literal("disable")
+                    .executes(MinecraftCommand::disableSync)
+                )
+            )
         );
     }
     
@@ -56,21 +64,53 @@ public class MinecraftCommand {
         try {
             // 获取机器人状态
             boolean isConnected = Tpsbot.INSTANCE.getBotClient() != null && Tpsbot.INSTANCE.getBotClient().isConnected();
+            boolean isSyncEnabled = Tpsbot.INSTANCE.getConfig().isServerGroupSyncEnabled();
             
             StringBuilder statusMsg = new StringBuilder("§6Tpsbot 状态:");
-            statusMsg.append("\n§7连接状态: ").append(isConnected ? "§a已连接" : "§c未连接");
-            statusMsg.append("\n§7OneBot URL: §r").append(Tpsbot.INSTANCE.getConfig().getOneBotUrl());
-            statusMsg.append("\n§7超级管理员: §r").append(Tpsbot.INSTANCE.getConfig().getSuperAdmin());
-            statusMsg.append("\n§7命令前缀: §r").append(Tpsbot.INSTANCE.getConfig().getCommandPrefix());
+            statusMsg.append("\n§7连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
+            statusMsg.append("\n§7群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
+            statusMsg.append("\n§7OneBot URL: §r" + Tpsbot.INSTANCE.getConfig().getOneBotUrl());
+            statusMsg.append("\n§7超级管理员: §r" + Tpsbot.INSTANCE.getConfig().getSuperAdmin());
+            statusMsg.append("\n§7命令前缀: §r" + Tpsbot.INSTANCE.getConfig().getCommandPrefix());
             
             // 获取服务器基本信息
             String serverStats = Tpsbot.INSTANCE.getServerManager().getServerInfo().getBasicStats();
-            statusMsg.append("\n§7服务器状态: §r").append(serverStats);
+            statusMsg.append("\n§7服务器状态: §r" + serverStats);
             
             source.sendFeedback(() -> Text.literal(statusMsg.toString()), false);
         } catch (Exception e) {
             source.sendFeedback(() -> Text.literal("§c获取状态失败: " + e.getMessage()), false);
             Tpsbot.LOGGER.error("Failed to get status: {}", e.getMessage());
+        }
+        
+        return 1;
+    }
+    
+    private static int enableSync(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        try {
+            Tpsbot.INSTANCE.getConfig().setServerGroupSyncEnabled(true);
+            source.sendFeedback(() -> Text.literal("§a群服互通功能已启用"), true);
+            Tpsbot.LOGGER.info("Server-group sync enabled");
+        } catch (Exception e) {
+            source.sendFeedback(() -> Text.literal("§c启用群服互通失败: " + e.getMessage()), true);
+            Tpsbot.LOGGER.error("Failed to enable sync: {}", e.getMessage());
+        }
+        
+        return 1;
+    }
+    
+    private static int disableSync(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        
+        try {
+            Tpsbot.INSTANCE.getConfig().setServerGroupSyncEnabled(false);
+            source.sendFeedback(() -> Text.literal("§c群服互通功能已禁用"), true);
+            Tpsbot.LOGGER.info("Server-group sync disabled");
+        } catch (Exception e) {
+            source.sendFeedback(() -> Text.literal("§c禁用群服互通失败: " + e.getMessage()), true);
+            Tpsbot.LOGGER.error("Failed to disable sync: {}", e.getMessage());
         }
         
         return 1;

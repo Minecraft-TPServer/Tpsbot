@@ -163,6 +163,29 @@ public class EventSystem {
                     Tpsbot.INSTANCE.getBotClient().sendMessage(groupId, result.message());
                 }
             }
+        } else {
+            // Forward non-command messages to Minecraft server
+            if (Tpsbot.INSTANCE.getConfig().isServerGroupSyncEnabled()) {
+                try {
+                    // Get sender info
+                    String senderName = "QQ用户";
+                    if (event.has("sender")) {
+                        JsonObject sender = event.getAsJsonObject("sender");
+                        if (sender.has("nickname")) {
+                            senderName = sender.get("nickname").getAsString();
+                        } else if (sender.has("user_id")) {
+                            senderName = "QQ_" + sender.get("user_id").getAsString();
+                        }
+                    }
+                    
+                    String formattedMessage = "[QQ] " + senderName + ": " + message;
+                    Tpsbot.INSTANCE.getServerManager().broadcastMessage(formattedMessage);
+                    
+                    Tpsbot.LOGGER.info("QQ group message forwarded: {}: {}", senderName, message);
+                } catch (Exception e) {
+                    Tpsbot.LOGGER.error("Failed to forward QQ group message: {}", e.getMessage());
+                }
+            }
         }
     }
     

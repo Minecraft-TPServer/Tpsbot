@@ -22,6 +22,7 @@ public class BotConfig {
     private long superAdmin = 0L;
     private List<Long> adminGroups = new ArrayList<>();
     private String commandPrefix = "/";
+    private boolean serverGroupSyncEnabled = true;
     
     public BotConfig() {
         load();
@@ -55,6 +56,9 @@ public class BotConfig {
                 }
                 if (jsonObject.has("commandPrefix")) {
                     this.commandPrefix = jsonObject.get("commandPrefix").getAsString();
+                }
+                if (jsonObject.has("serverGroupSyncEnabled")) {
+                    this.serverGroupSyncEnabled = jsonObject.get("serverGroupSyncEnabled").getAsBoolean();
                 }
             } catch (IOException e) {
                 System.err.println("Failed to load config: " + e.getMessage());
@@ -109,6 +113,15 @@ public class BotConfig {
     
     public void setCommandPrefix(String commandPrefix) {
         this.commandPrefix = commandPrefix;
+        save();
+    }
+    
+    public boolean isServerGroupSyncEnabled() {
+        return serverGroupSyncEnabled;
+    }
+    
+    public void setServerGroupSyncEnabled(boolean serverGroupSyncEnabled) {
+        this.serverGroupSyncEnabled = serverGroupSyncEnabled;
         save();
     }
 }

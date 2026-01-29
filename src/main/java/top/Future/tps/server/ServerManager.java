@@ -254,4 +254,17 @@ public class ServerManager {
         if (server == null) return;
         stopServer();
     }
+    
+    // Send message to all players in the server
+    public void broadcastMessage(String message) {
+        if (server == null) return;
+        
+        try {
+            Text textMessage = Text.literal(message);
+            server.getPlayerManager().broadcast(textMessage, false);
+            Tpsbot.LOGGER.info("Broadcasted message: {}", message);
+        } catch (Exception e) {
+            Tpsbot.LOGGER.error("Failed to broadcast message: {}", e.getMessage());
+        }
+    }
 }

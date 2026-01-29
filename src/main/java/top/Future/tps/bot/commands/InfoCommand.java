@@ -40,9 +40,9 @@ public class InfoCommand implements CommandHandler.Command {
         // 构建完整的信息
         StringBuilder infoBuilder = new StringBuilder();
         infoBuilder.append("===Tpsbot 信息===");
-        infoBuilder.append("\n版本: §r" + modVersion);
-        infoBuilder.append("\n连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
-        infoBuilder.append("\n群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
+        infoBuilder.append("\n版本: " + modVersion);
+        infoBuilder.append("\n连接状态: " + (isConnected ? "已连接" : "未连接"));
+        infoBuilder.append("\n群服互通: " + (isSyncEnabled ? "已启用" : "已禁用"));
         infoBuilder.append("\nOneBot URL: " + Tpsbot.INSTANCE.getConfig().getOneBotUrl());
         infoBuilder.append("\n超级管理员: " + Tpsbot.INSTANCE.getConfig().getSuperAdmin());
         infoBuilder.append("\n命令前缀: " + Tpsbot.INSTANCE.getConfig().getCommandPrefix());

@@ -2,6 +2,8 @@ package top.Future.tps;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.Future.tps.bot.EventSystem;
@@ -10,9 +12,12 @@ import top.Future.tps.config.BotConfig;
 import top.Future.tps.permission.PermissionManager;
 import top.Future.tps.server.ServerManager;
 
+import java.util.Optional;
+
 public class Tpsbot implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("tpsbot");
     public static Tpsbot INSTANCE;
+    public static final String MOD_ID = "tpsbot";
     
     private BotConfig config;
     private OneBotClient botClient;
@@ -23,22 +28,31 @@ public class Tpsbot implements ModInitializer {
     @Override
     public void onInitialize() {
         INSTANCE = this;
-        
-        LOGGER.info("Initializing Tpsbot...");
-        
+
+        String modVersion = "UNKNOWN";
+        try {
+            Optional<ModContainer> container = FabricLoader.getInstance().getModContainer(MOD_ID);
+            if (container.isPresent()) {
+                modVersion = container.get().getMetadata().getVersion().getFriendlyString();
+            }
+        } catch (Exception e) {
+            LOGGER.warn("Failed to get mod version: {}", e.getMessage());
+        }
+        LOGGER.info("Initializing Tpsbot {}...", modVersion);
+
         // Initialize components - BotConfig first
         config = new BotConfig();
         LOGGER.info("BotConfig initialized successfully!");
-        
+
         permissionManager = new PermissionManager();
         serverManager = new ServerManager();
         eventSystem = new EventSystem();
         botClient = new OneBotClient();
-        
+
         // Register Minecraft commands
         top.Future.tps.command.MinecraftCommand.register();
         LOGGER.info("Minecraft commands registered successfully!");
-        
+
         // Register server lifecycle events
         ServerLifecycleEvents.SERVER_STARTED.register(server -> {
             LOGGER.info("Server started, connecting to OneBot...");
@@ -46,14 +60,14 @@ public class Tpsbot implements ModInitializer {
             serverManager.setServer(server);
             botClient.connect();
         });
-        
+
         ServerLifecycleEvents.SERVER_STOPPING.register(server -> {
             LOGGER.info("Server stopping, disconnecting from OneBot...");
             if (botClient != null) {
                 botClient.disconnect();
             }
         });
-        
+
         LOGGER.info("Tpsbot initialized successfully!");
     }
     

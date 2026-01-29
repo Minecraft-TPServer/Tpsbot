@@ -29,7 +29,8 @@ public class EventSystem {
             }
             
             if (!event.has("post_type")) {
-                Tpsbot.LOGGER.error("Failed to handle event: missing post_type field");
+                // 可能是心跳消息或其他非标准消息，记录为调试信息而不是错误
+                Tpsbot.LOGGER.debug("Received non-standard event: missing post_type field");
                 Tpsbot.LOGGER.debug("Event: {}", event.toString());
                 return;
             }
@@ -180,8 +181,6 @@ public class EventSystem {
                     
                     String formattedMessage = "[QQ] " + senderName + ": " + message;
                     Tpsbot.INSTANCE.getServerManager().broadcastMessage(formattedMessage);
-                    
-                    Tpsbot.LOGGER.info("QQ group message forwarded: {}: {}", senderName, message);
                 } catch (Exception e) {
                     Tpsbot.LOGGER.error("Failed to forward QQ group message: {}", e.getMessage());
                 }

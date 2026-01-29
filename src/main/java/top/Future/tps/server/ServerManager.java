@@ -262,7 +262,7 @@ public class ServerManager {
         try {
             Text textMessage = Text.literal(message);
             server.getPlayerManager().broadcast(textMessage, false);
-            Tpsbot.LOGGER.info("Broadcasted message: {}", message);
+            Tpsbot.LOGGER.debug("Broadcasted message: {}", message);
         } catch (Exception e) {
             Tpsbot.LOGGER.error("Failed to broadcast message: {}", e.getMessage());
         }

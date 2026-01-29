@@ -91,8 +91,7 @@ public class Tpsbot implements ModInitializer {
                 for (long groupId : config.getAdminGroups()) {
                     botClient.sendMessage(groupId, formattedMessage);
                 }
-                
-                LOGGER.info("Game chat message forwarded: {}: {}", playerName, messageContent);
+                LOGGER.debug("Game chat message forwarded: {}: {}", playerName, messageContent);
             } catch (Exception e) {
                 LOGGER.error("Failed to handle game chat message: {}", e.getMessage());
             }

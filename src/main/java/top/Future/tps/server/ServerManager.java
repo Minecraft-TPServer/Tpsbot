@@ -131,12 +131,31 @@ public class ServerManager {
     // OP management
     public boolean opPlayer(String name) {
         if (server == null) return false;
-        
-        PlayerManager playerManager = server.getPlayerManager();
         try {
+            PlayerManager playerManager = server.getPlayerManager();
             ServerPlayerEntity player = playerManager.getPlayer(name);
+            GameProfile profile = null;
+            OperatorList operatorList = playerManager.getOpList();
             if (player != null) {
+                // 玩家在线
+                profile = player.getGameProfile();
+                ServerConfigEntry<GameProfile> existingEntry = operatorList.get(profile);
+                if (existingEntry != null) {
+                    Tpsbot.LOGGER.info("玩家 {} 已经是OP", name);
+                    return true;
+                }
                 playerManager.addToOperators(player.getGameProfile());
+                return true;
+            } else {
+                // 玩家离线，从缓存查找
+                Optional<GameProfile> profileOpt = Objects.requireNonNull(server.getUserCache()).findByName(name);
+                if (profileOpt.isPresent()) profile = profileOpt.get();
+                ServerConfigEntry<GameProfile> existingEntry = operatorList.get(profile);
+                if (existingEntry != null) {
+                    Tpsbot.LOGGER.info("玩家 {} 已经是OP", name);
+                    return true;
+                }
+                operatorList.add(new OperatorEntry(profile,4,false));
                 return true;
             }
         } catch (Exception e) {
@@ -147,12 +166,21 @@ public class ServerManager {
 
     public boolean deopPlayer(String name) {
         if (server == null) return false;
-
-        PlayerManager playerManager = server.getPlayerManager();
         try {
+            PlayerManager playerManager = server.getPlayerManager();
             ServerPlayerEntity player = playerManager.getPlayer(name);
+            GameProfile profile = null;
+            OperatorList operatorList = playerManager.getOpList();
             if (player != null) {
+                // 玩家在线
+                profile = player.getGameProfile();
                 playerManager.removeFromOperators(player.getGameProfile());
+                return true;
+            } else {
+                // 玩家离线，从缓存查找
+                Optional<GameProfile> profileOpt = Objects.requireNonNull(server.getUserCache()).findByName(name);
+                if (profileOpt.isPresent()) profile = profileOpt.get();
+                operatorList.remove(new OperatorEntry(profile,4,false));
                 return true;
             }
         } catch (Exception e) {
@@ -188,7 +216,6 @@ public class ServerManager {
         if (server == null) return false;
         try {
             PlayerManager playerManager = server.getPlayerManager();
-            ServerPlayerEntity player = playerManager.getPlayer(name);
             Whitelist whitelist = playerManager.getWhitelist();
             Optional<GameProfile> profileOpt = Objects.requireNonNull(server.getUserCache()).findByName(name);
             profileOpt.ifPresent(profile -> whitelist.add(new WhitelistEntry(profile)));

@@ -36,6 +36,8 @@ public class CommandHandler {
         registerCommand(new DeopCommand());
         registerCommand(new OpListCommand());
         registerCommand(new RebootCommand());
+        registerCommand(new CarpetCommand());
+        registerCommand(new RuleSearchCommand());
         
         Tpsbot.LOGGER.info("Registered {} commands", commands.size());
     }

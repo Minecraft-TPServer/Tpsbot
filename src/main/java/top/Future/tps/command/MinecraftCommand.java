@@ -70,6 +70,7 @@ public class MinecraftCommand {
             boolean isSyncEnabled = Tpsbot.INSTANCE.getConfig().isServerGroupSyncEnabled();
             
             StringBuilder statusMsg = new StringBuilder("§6Tpsbot 状态:");
+            statusMsg.append("\n§7版本: " + Tpsbot.INSTANCE.getModVersion());
             statusMsg.append("\n§7连接状态: " + (isConnected ? "§a已连接" : "§c未连接"));
             statusMsg.append("\n§7群服互通: " + (isSyncEnabled ? "§a已启用" : "§c已禁用"));
             statusMsg.append("\n§7OneBot URL: §r" + Tpsbot.INSTANCE.getConfig().getOneBotUrl());

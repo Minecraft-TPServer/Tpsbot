@@ -1,15 +1,13 @@
 package top.Future.tps.server;
 
 import com.mojang.authlib.GameProfile;
+import lombok.Getter;
 import net.minecraft.server.*;
-import net.minecraft.server.command.CommandOutput;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.command.CommandSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
-import lombok.Getter;
 import top.Future.tps.Tpsbot;
 import top.Future.tps.utils.*;
 
@@ -18,8 +16,11 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Getter
 public class ServerManager {
+    // Getter for server
     private MinecraftServer server;
+    // Getter for server info
     private final ServerInfo serverInfo;
     
     public ServerManager() {
@@ -31,17 +32,7 @@ public class ServerManager {
         this.server = server;
         this.serverInfo.setServer(server);
     }
-    
-    // Getter for server
-    public MinecraftServer getServer() {
-        return server;
-    }
-    
-    // Getter for server info
-    public ServerInfo getServerInfo() {
-        return serverInfo;
-    }
-    
+
     // Player management
     public List<String> getPlayerNames() {
         if (server == null) return Collections.emptyList();
@@ -78,7 +69,6 @@ public class ServerManager {
                 null                        // 无实体
         );
         server.getCommandManager().executeWithPrefix(commandSource, command);
-        ;
         return result.getCombinedMessage();
     }
     

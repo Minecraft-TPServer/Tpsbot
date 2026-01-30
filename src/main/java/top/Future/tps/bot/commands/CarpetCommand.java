@@ -34,14 +34,14 @@ public class CarpetCommand implements CommandHandler.Command {
         }
 
         if ("list".equals(args[0])) {
-            // 执行 /carpet list 命令
-            String fullCommand = "/carpet list";
+            // 执行 /carpet 命令，查看所有规则
+            String fullCommand = "/carpet";
             String result = Tpsbot.INSTANCE.getServerManager().minecraftCommand(fullCommand);
             
             if (result != null && !result.isEmpty()) {
                 return new CommandHandler.CommandResult(true, "执行命令: " + fullCommand + "\n结果: " + result);
             } else {
-                return new CommandHandler.CommandResult(true, "执行命令: " + fullCommand + "\n命令执行成功");
+                return new CommandHandler.CommandResult(true, "执行命令: " + fullCommand + "\n命令返回不明确");
             }
         } else if (args.length < 2) {
             return new CommandHandler.CommandResult(false, "使用格式: /carpet <command> <true/false/0/1/2/3/ops> 或 /carpet list");

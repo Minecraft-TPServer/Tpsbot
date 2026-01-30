@@ -5,9 +5,7 @@ import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.message.v1.ServerMessageEvents;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.Future.tps.bot.EventSystem;
@@ -15,8 +13,11 @@ import top.Future.tps.bot.OneBotClient;
 import top.Future.tps.config.BotConfig;
 import top.Future.tps.permission.PermissionManager;
 import top.Future.tps.server.ServerManager;
+import top.Future.tps.bot.commands.InfoCommand;
 
 import java.util.Optional;
+
+import static top.Future.tps.permission.PermissionManager.LEVEL_ADMIN;
 
 public class Tpsbot implements ModInitializer {
     public static final Logger LOGGER = LogManager.getLogger("tpsbot");
@@ -97,6 +98,10 @@ public class Tpsbot implements ModInitializer {
             }
         });
 
+        for (long groupId : config.getAdminGroups()) {
+            InfoCommand infoCommand = new InfoCommand();
+            infoCommand.execute(0,groupId,"member",new String[]{});
+        }
         LOGGER.info("Tpsbot initialized successfully!");
         LOGGER.info("Game chat message forwarding to QQ enabled!");
     }
